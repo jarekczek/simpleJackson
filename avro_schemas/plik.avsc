@@ -1,0 +1,11 @@
+{
+  "type" : "record",
+  "name" : "BookAvro",
+  "fields" : [ {
+    "name" : "author",
+    "type" : [ "null", "string" ]
+  }, {
+    "name" : "title",
+    "type" : [ "null", "string" ]
+  } ]
+}

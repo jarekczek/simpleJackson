@@ -13,6 +13,16 @@ apply plugin: 'idea'
 idea.module.downloadJavadoc = true
 //        downloadSources = true
 
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.11.0"
+  }
+}
+apply plugin: "com.commercehub.gradle.plugin.avro-base"
+
 repositories {
   mavenCentral()
 }
@@ -22,6 +32,7 @@ dependencies {
   compile 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
   compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.9'
   compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.8.9'
+  compile 'org.apache.avro:avro:1.8.2'
 }
 
 tasks.withType(Test) {
@@ -29,3 +40,10 @@ tasks.withType(Test) {
   testLogging.showStandardStreams = true
   testLogging.exceptionFormat = 'full'
 }
+
+task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask) {
+  source("avro_schemas")
+  outputDir = file("avro_generated")
+}
+
+compileJava.source("avro_generated")
