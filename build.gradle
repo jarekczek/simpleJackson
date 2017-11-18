@@ -1,0 +1,29 @@
+apply plugin: 'java'
+
+apply plugin: 'eclipse'
+eclipse.classpath.downloadJavadoc = true
+eclipse.classpath.downloadSources = false
+tasks.eclipse {
+  doLast {
+    'D:\\Program_Files\\eSpeak\\command_line\\espeak.exe eclipse'.execute()
+  }
+}
+
+apply plugin: 'idea'
+idea.module.downloadJavadoc = true
+//        downloadSources = true
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile 'junit:junit:4.12'
+  compile 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
+}
+
+tasks.withType(Test) {
+  outputs.upToDateWhen {false}
+  testLogging.showStandardStreams = true
+  testLogging.exceptionFormat = 'full'
+}
