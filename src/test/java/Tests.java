@@ -9,6 +9,9 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.cfg.MutableConfigOverride;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.sun.org.apache.xalan.internal.utils.ObjectFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,4 +54,15 @@ public class Tests
     System.out.println("successfully read movie as book");
     Assert.assertEquals("Psy", b.getTitle());
   }
+
+  @Test
+  public void xmlSerialization() throws IOException
+  {
+    ObjectMapper om = new XmlMapper();
+    MutableConfigOverride cfg = om.configOverride(Book.class);
+    Book b = new Book();
+    b.setTitle("Psy");
+    om.writeValue(new File("plik.xml"), b);
+  }
+
 }
