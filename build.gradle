@@ -33,6 +33,7 @@ dependencies {
   compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.9'
   compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.8.9'
   compile 'org.apache.avro:avro:1.8.2'
+  compile 'org.slf4j:slf4j-jdk14:1.7.25'
 }
 
 tasks.withType(Test) {
@@ -46,4 +47,4 @@ task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask)
   outputDir = file("avro_generated")
 }
 
-compileJava.source("avro_generated")
+sourceSets.main.java.srcDir "avro_generated"
