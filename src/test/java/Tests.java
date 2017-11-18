@@ -78,4 +78,13 @@ public class Tests
     b.setTitle("Psy");
     om.writer(om.schemaFor(Book.class)).writeValue(gen, b);
   }
+
+  @Test
+  public void avroSchemaWrite() throws IOException
+  {
+    AvroMapper om = new AvroMapper();
+    String schemaStr = om.schemaFor(Book.class).getAvroSchema().toString(true);
+    System.out.println(schemaStr);
+    new FileOutputStream("plik.avsc").write(schemaStr.getBytes());
+  }
 }
