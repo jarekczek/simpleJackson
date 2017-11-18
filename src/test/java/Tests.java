@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -86,5 +87,25 @@ public class Tests
     String schemaStr = om.schemaFor(Book.class).getAvroSchema().toString(true);
     System.out.println(schemaStr);
     new FileOutputStream("plik.avsc").write(schemaStr.getBytes());
+  }
+
+  abstract class IgnoreDirector
+  {
+    @JsonIgnore String director;
+  }
+
+  @Test
+  public void useIgnoreMixIn() throws IOException
+  {
+    logger.info("This is just a simple test...");
+    Movie m = new Movie();
+    m.setTitle("Angelika");
+    m.setDirector("Polak");
+    ObjectMapper om = new ObjectMapper();
+    om.addMixIn(Movie.class, IgnoreDirector.class);
+    om.writeValue(_file, m);
+
+    Movie m2 = om.readValue(_file, Movie.class);
+    Assert.assertEquals(null, m2.getDirector());
   }
 }
