@@ -10,6 +10,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.cfg.MutableConfigOverride;
+import com.fasterxml.jackson.dataformat.avro.AvroFactory;
+import com.fasterxml.jackson.dataformat.avro.AvroGenerator;
+import com.fasterxml.jackson.dataformat.avro.AvroMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.sun.org.apache.xalan.internal.utils.ObjectFactory;
 import org.junit.Assert;
@@ -59,10 +62,20 @@ public class Tests
   public void xmlSerialization() throws IOException
   {
     ObjectMapper om = new XmlMapper();
-    MutableConfigOverride cfg = om.configOverride(Book.class);
     Book b = new Book();
     b.setTitle("Psy");
     om.writeValue(new File("plik.xml"), b);
   }
 
+  @Test
+  public void avroWrite() throws IOException
+  {
+    AvroFactory af = new AvroFactory();
+    AvroGenerator gen = af.createGenerator(new FileOutputStream("plik.avro"));
+    af.configure(AvroGenerator.Feature.AVRO_FILE_OUTPUT, true);
+    AvroMapper om = new AvroMapper(af);
+    Book b = new Book();
+    b.setTitle("Psy");
+    om.writer(om.schemaFor(Book.class)).writeValue(gen, b);
+  }
 }
